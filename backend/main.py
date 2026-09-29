@@ -71,7 +71,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://127.0.0.1:5500",
-        "http://localhost:5500"
+        "http://localhost:5500",
+        "https://airtrace-ai-deploy-1.onrender.com"
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -397,6 +398,7 @@ Do not invent measurements that were not provided.
             contents=prompt
         )
 
+
         return {
 
             "city":
@@ -472,15 +474,19 @@ A citizen has submitted the following
 pollution report:
 
 City:
+
 {report.city}
 
 Description:
+
 {report.description}
 
 Latitude:
+
 {report.latitude}
 
 Longitude:
+
 {report.longitude}
 
 Analyze this citizen report.
@@ -521,6 +527,7 @@ Important:
 
             contents=prompt
         )
+
 
         return {
 
