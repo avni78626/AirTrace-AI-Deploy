@@ -181,7 +181,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                     data.data_source || "Open-Meteo";
             }
 
-
             // ============================
             // REMOVE OLD CITY MARKER
             // ============================
@@ -280,21 +279,142 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             cityMarker.openPopup();
 
+
         } catch (error) {
 
             console.error(
-                "Unable to analyze city:",
+                "Environmental data unavailable:",
                 error
             );
 
-            if (mapStatus) {
-                mapStatus.textContent =
-                    "Unable to load city data.";
+            /*
+             * Open-Meteo can temporarily return HTTP 429.
+             * Do not break the map when that happens.
+             */
+
+            const CITY_COORDINATES = {
+
+                "Kathua": [32.3694, 75.5254],
+                "Delhi": [28.6139, 77.2090],
+                "Mumbai": [19.0760, 72.8777],
+                "Kolkata": [22.5726, 88.3639],
+                "Bengaluru": [12.9716, 77.5946],
+                "Hyderabad": [17.3850, 78.4867],
+                "Chennai": [13.0827, 80.2707],
+                "Pune": [18.5204, 73.8567],
+                "Surat": [21.1702, 72.8311],
+                "Ahmedabad": [23.0225, 72.5714],
+                "Jaipur": [26.9124, 75.7873],
+                "Lucknow": [26.8467, 80.9462],
+                "Kanpur": [26.4499, 80.3319],
+                "Nagpur": [21.1458, 79.0882],
+                "Indore": [22.7196, 75.8577],
+                "Bhopal": [23.2599, 77.4126],
+                "Patna": [25.5941, 85.1376],
+                "Ranchi": [23.3441, 85.3096],
+                "Bhubaneswar": [20.2961, 85.8245],
+                "Chandigarh": [30.7333, 76.7794],
+                "Amritsar": [31.6340, 74.8723],
+                "Ludhiana": [30.9010, 75.8573],
+                "Jammu": [32.7266, 74.8570],
+                "Srinagar": [34.0837, 74.7973]
+            };
+
+            const cityKey = Object.keys(CITY_COORDINATES).find(
+                name =>
+                    name.toLowerCase() === city.toLowerCase()
+            );
+
+            if (!cityKey) {
+
+                if (mapStatus) {
+                    mapStatus.textContent =
+                        "Environmental data temporarily unavailable.";
+                }
+
+                if (mapDataSource) {
+                    mapDataSource.textContent =
+                        "Live environmental service temporarily unavailable";
+                }
+
+                updateMapIndicators({});
+
+                return;
             }
 
-            alert(
-                "Could not load environmental data for this city."
+            const [latitude, longitude] =
+                CITY_COORDINATES[cityKey];
+
+            if (mapStatus) {
+                mapStatus.textContent =
+                    `Environmental data temporarily unavailable for ${cityKey}. Showing city location.`;
+            }
+
+            if (mapDataSource) {
+                mapDataSource.textContent =
+                    "City location fallback";
+            }
+
+            updateMapIndicators({});
+
+            if (cityMarker) {
+                map.removeLayer(cityMarker);
+            }
+
+            cityMarker = L.circleMarker(
+                [latitude, longitude],
+                {
+                    radius: 16,
+                    color: "orange",
+                    fillColor: "orange",
+                    fillOpacity: 0.6,
+                    weight: 4
+                }
             );
+
+            cityMarker.bindPopup(`
+                <div style="min-width:260px">
+
+                    <h3>
+                        📍 AirTrace City Location
+                    </h3>
+
+                    <p>
+                        <strong>City:</strong>
+                        ${cityKey}
+                    </p>
+
+                    <p>
+                        <strong>Environmental data:</strong>
+                        Temporarily unavailable
+                    </p>
+
+                    <p>
+                        <strong>Reason:</strong>
+                        Live environmental data service is temporarily rate-limited.
+                    </p>
+
+                    <p>
+                        <strong>Coordinates:</strong>
+                        ${latitude}, ${longitude}
+                    </p>
+
+                    <p>
+                        <strong>AirTrace:</strong>
+                        Citizen and hotspot intelligence remains available.
+                    </p>
+
+                </div>
+            `);
+
+            cityMarker.addTo(map);
+
+            map.setView(
+                [latitude, longitude],
+                9
+            );
+
+            cityMarker.openPopup();
         }
     }
 
