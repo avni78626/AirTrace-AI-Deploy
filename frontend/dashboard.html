@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | AirTrace AI</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+
+<body>
+
+
+<header class="navbar">
+
+    <div class="logo">
+        🌍 AirTrace AI
+    </div>
+
+    <nav>
+
+        <a href="index.html">Home</a>
+
+        <a href="dashboard.html">Dashboard</a>
+
+        <a href="map.html">Risk Map</a>
+
+        <a href="report.html">Report</a>
+
+    </nav>
+
+</header>
+
+
+
+<main class="dashboard">
+
+
+    <!-- PAGE HEADING -->
+
+    <section class="dashboard-heading">
+
+        <div>
+
+            <p class="tagline">
+                CLIMATE MONITORING
+            </p>
+
+            <h1>
+                Climate Dashboard
+            </h1>
+
+            <p>
+                Current environmental conditions and
+                predicted climate risks.
+            </p>
+
+        </div>
+
+
+        <!-- CITY SELECTOR -->
+
+        <div class="location">
+
+            📍
+
+            <input
+                type="text"
+                id="cityInput"
+                value="Kathua"
+                placeholder="Enter city"
+            >
+
+            <button
+                id="loadCityBtn"
+                type="button"
+            >
+                Load
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- REAL DATA STATUS -->
+
+    <section class="dashboard-section">
+
+        <div class="section-header">
+
+            <div>
+
+                <p class="tagline">
+                    LIVE ENVIRONMENTAL DATA
+                </p>
+
+                <h2>
+                    🌍 Current Conditions
+                </h2>
+
+                <p id="dataSource">
+                    Loading environmental data...
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="cityStatus"
+            style="margin-bottom: 20px;"
+        >
+            Loading...
+        </div>
+
+
+    </section>
+
+
+
+    <!-- CURRENT CONDITIONS -->
+
+    <section class="stats-grid">
+
+
+        <div class="stat-card">
+
+            <p>Temperature</p>
+
+            <h2 id="temperature">
+                --
+            </h2>
+
+            <span>
+                Current temperature
+            </span>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <p>Humidity</p>
+
+            <h2 id="humidity">
+                --
+            </h2>
+
+            <span>
+                Current humidity
+            </span>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <p>PM2.5</p>
+
+            <h2 id="pollution">
+                --
+            </h2>
+
+            <span>
+                Current PM2.5 concentration
+            </span>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <p>PM10</p>
+
+            <h2 id="pm10">
+                --
+            </h2>
+
+            <span>
+                Current PM10 concentration
+            </span>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <p>US AQI</p>
+
+            <h2 id="aqi">
+                --
+            </h2>
+
+            <span>
+                Air Quality Index
+            </span>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <p>Wind Speed</p>
+
+            <h2 id="wind">
+                --
+            </h2>
+
+            <span>
+                Current wind speed
+            </span>
+
+        </div>
+
+
+
+        <div class="stat-card risk-card">
+
+            <p>Overall Risk</p>
+
+            <h2 id="risk">
+                --
+            </h2>
+
+            <span>
+                Current pollution risk
+            </span>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- LOCATION INFORMATION -->
+
+    <section class="dashboard-section">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    📍 Location Information
+                </h2>
+
+                <p>
+                    Geographic location used for environmental analysis.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <p>City</p>
+
+                <h2 id="cityName">
+                    --
+                </h2>
+
+                <span>
+                    Selected location
+                </span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <p>Country</p>
+
+                <h2 id="countryName">
+                    --
+                </h2>
+
+                <span>
+                    Detected country
+                </span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <p>Latitude</p>
+
+                <h2 id="latitude">
+                    --
+                </h2>
+
+                <span>
+                    Geographic coordinate
+                </span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <p>Longitude</p>
+
+                <h2 id="longitude">
+                    --
+                </h2>
+
+                <span>
+                    Geographic coordinate
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- PREDICTION -->
+
+    <section class="dashboard-section">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    Climate Risk Prediction
+                </h2>
+
+                <p>
+                    Predicted risk level for upcoming days.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="chart-container">
+
+            <canvas id="predictionChart"></canvas>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- TEMPERATURE -->
+
+    <section class="dashboard-section">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    Temperature Trend
+                </h2>
+
+                <p>
+                    Temperature variation over time.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="chart-container">
+
+            <canvas id="temperatureChart"></canvas>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- AI ANALYSIS -->
+
+    <section class="ai-section">
+
+
+        <div>
+
+            <p class="tagline">
+                ARTIFICIAL INTELLIGENCE
+            </p>
+
+            <h2>
+                🤖 AI Climate Analysis
+            </h2>
+
+            <p id="analysis">
+
+                Loading AI environmental analysis...
+
+            </p>
+
+        </div>
+
+
+
+        <div class="recommendation-box">
+
+            <h3>
+                Recommendations
+            </h3>
+
+
+            <ul id="recommendations">
+
+                <li>
+                    Loading recommendations...
+                </li>
+
+            </ul>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ACTION BUTTONS -->
+
+    <section class="dashboard-actions">
+
+        <a href="map.html" class="primary-btn">
+            🗺️ View Risk Map
+        </a>
+
+        <a href="report.html" class="secondary-btn">
+            🚨 Report an Issue
+        </a>
+
+    </section>
+
+
+</main>
+
+
+
+<footer>
+
+    <p>
+        © 2026 AirTrace AI | Climate Intelligence Platform
+    </p>
+
+</footer>
+
+
+
+<!-- CHART.JS -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- AIRTRACE API -->
+
+<script src="js/api.js"></script>
+
+<!-- DASHBOARD LOGIC -->
+
+<script src="js/dashboard.js"></script>
+
+
+</body>
+
+</html>

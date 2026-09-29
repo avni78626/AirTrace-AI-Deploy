@@ -1,0 +1,7 @@
+backend/venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+backend/main.py.backup
+backend/services_backup/

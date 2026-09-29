@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Report Issue | AirTrace AI</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= NAVBAR ================= -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🌍 AirTrace AI
+        </div>
+
+        <div class="nav-links">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a href="map.html">
+                Risk Map
+            </a>
+
+            <a
+                href="report.html"
+                class="active"
+            >
+                Report
+            </a>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="report-page">
+
+
+        <div class="report-heading">
+
+            <h1>
+                Report a Climate Issue
+            </h1>
+
+            <p>
+                Help us understand climate-related
+                problems happening in your area.
+            </p>
+
+        </div>
+
+
+
+        <!-- ================= FORM ================= -->
+
+        <div class="report-container">
+
+            <form id="reportForm">
+
+
+                <!-- LOCATION -->
+
+                <div class="form-group">
+
+                    <label for="location">
+                        Location
+                    </label>
+
+                    <input
+                        type="text"
+                        id="location"
+                        placeholder="Enter your city"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- PROBLEM -->
+
+                <div class="form-group">
+
+                    <label for="problem">
+                        Problem Type
+                    </label>
+
+                    <select
+                        id="problem"
+                        required
+                    >
+
+                        <option value="">
+                            Select a problem
+                        </option>
+
+                        <option value="Flood">
+                            Flood
+                        </option>
+
+                        <option value="Heat">
+                            Extreme Heat
+                        </option>
+
+                        <option value="Pollution">
+                            Pollution
+                        </option>
+
+                        <option value="Water shortage">
+                            Water Shortage
+                        </option>
+
+                        <option value="Smoke">
+                            Smoke
+                        </option>
+
+                        <option value="Dust">
+                            Dust
+                        </option>
+
+                        <option value="Fire">
+                            Fire
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group">
+
+                    <label for="description">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="description"
+                        rows="6"
+                        placeholder="Describe the problem..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+
+                <!-- IMAGE -->
+
+                <div class="form-group">
+
+                    <label for="image">
+                        Upload Image
+                    </label>
+
+                    <input
+                        type="file"
+                        id="image"
+                        accept="image/*"
+                    >
+
+                    <small>
+                        Upload an image related to the issue.
+                    </small>
+
+                </div>
+
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    class="submit-btn"
+                >
+                    Submit Report
+                </button>
+
+
+
+                <!-- MESSAGE -->
+
+                <div
+                    id="successMessage"
+                    class="success-message"
+                    style="display: none;"
+                >
+                    Report submitted successfully!
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- ================= JAVASCRIPT ================= -->
+
+    <!-- API -->
+    <!-- ?v=2 forces browser to load the newest api.js -->
+
+    <script src="js/api.js?v=2"></script>
+
+    <!-- Report form logic -->
+
+    <script src="js/report.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Risk Map | AirTrace AI</title>
+
+
+    <!-- AirTrace CSS -->
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+
+    <!-- Leaflet CSS -->
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header class="navbar">
+
+        <div class="logo">
+            🌍 AirTrace AI
+        </div>
+
+
+        <nav>
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="dashboard.html">
+                Dashboard
+            </a>
+
+            <a
+                href="map.html"
+                class="active"
+            >
+                Risk Map
+            </a>
+
+            <a href="report.html">
+                Report
+            </a>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="map-page">
+
+
+        <!-- ================= MAP HEADING ================= -->
+
+        <section class="map-heading">
+
+            <div>
+
+                <p class="tagline">
+                    CLIMATE RISK VISUALIZATION
+                </p>
+
+
+                <h1>
+                    Climate Risk Map
+                </h1>
+
+
+                <p>
+                    Explore environmental conditions,
+                    pollution risk and citizen-reported
+                    hotspots.
+                </p>
+
+            </div>
+
+
+            <!-- CITY SEARCH -->
+
+            <div class="map-location">
+
+                📍
+
+                <input
+                    type="text"
+                    id="mapCityInput"
+                    value="Kathua"
+                    placeholder="Enter city"
+                >
+
+                <button
+                    id="analyzeCityBtn"
+                    type="button"
+                >
+                    Analyze
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= MAP ================= -->
+
+        <section class="map-container">
+
+            <div id="map"></div>
+
+        </section>
+
+
+
+        <!-- ================= STATUS ================= -->
+
+        <section
+            class="map-indicators"
+            style="margin-top: 25px;"
+        >
+
+            <p
+                class="tagline"
+                id="mapStatus"
+            >
+                Loading environmental data...
+            </p>
+
+            <h2>
+                🌍 Environmental Intelligence
+            </h2>
+
+            <p id="mapDataSource">
+                Loading...
+            </p>
+
+        </section>
+
+
+
+        <!-- ================= MAP LEGEND ================= -->
+
+        <section class="map-legend">
+
+            <h3>
+                Risk Level
+            </h3>
+
+
+            <div class="legend-items">
+
+
+                <div class="legend-item">
+
+                    <span class="legend-color high"></span>
+
+                    High / Very High Risk
+
+                </div>
+
+
+                <div class="legend-item">
+
+                    <span class="legend-color medium"></span>
+
+                    Moderate Risk
+
+                </div>
+
+
+                <div class="legend-item">
+
+                    <span class="legend-color low"></span>
+
+                    Low Risk
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= INDICATORS ================= -->
+
+        <section class="map-indicators">
+
+
+            <h2>
+                Climate Indicators
+            </h2>
+
+
+            <div class="indicator-grid">
+
+
+                <!-- TEMPERATURE -->
+
+                <div class="indicator-card">
+
+                    <span>
+                        🌡️
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            Temperature
+                        </h3>
+
+                        <p id="mapTemperature">
+                            --
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- POLLUTION -->
+
+                <div class="indicator-card">
+
+                    <span>
+                        💨
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            PM2.5
+                        </h3>
+
+                        <p id="mapPM25">
+                            --
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- AQI -->
+
+                <div class="indicator-card">
+
+                    <span>
+                        🌫️
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            US AQI
+                        </h3>
+
+                        <p id="mapAQI">
+                            --
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- RISK -->
+
+                <div class="indicator-card">
+
+                    <span>
+                        ⚠️
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            Risk Level
+                        </h3>
+
+                        <p id="mapRisk">
+                            --
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= ADDITIONAL DATA ================= -->
+
+        <section class="map-indicators">
+
+            <h2>
+                📊 Air Quality Details
+            </h2>
+
+
+            <div class="indicator-grid">
+
+
+                <div class="indicator-card">
+
+                    <span>
+                        🌫️
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            PM10
+                        </h3>
+
+                        <p id="mapPM10">
+                            --
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="indicator-card">
+
+                    <span>
+                        💧
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            Humidity
+                        </h3>
+
+                        <p id="mapHumidity">
+                            --
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="indicator-card">
+
+                    <span>
+                        💨
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            Wind Speed
+                        </h3>
+
+                        <p id="mapWind">
+                            --
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="indicator-card">
+
+                    <span>
+                        📍
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            Coordinates
+                        </h3>
+
+                        <p id="mapCoordinates">
+                            --
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= ACTION ================= -->
+
+        <section class="map-action">
+
+            <h2>
+                See something unusual?
+            </h2>
+
+
+            <p>
+                Help improve environmental monitoring
+                by reporting an unusual pollution event.
+            </p>
+
+
+            <a
+                href="report.html"
+                class="primary-btn"
+            >
+                Report an Issue
+            </a>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <p>
+            © 2026 AirTrace AI |
+            Climate Intelligence Platform
+        </p>
+
+    </footer>
+
+
+
+    <!-- ================= LEAFLET JS ================= -->
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    ></script>
+
+
+    <!-- ================= AIRTRACE API ================= -->
+
+    <script src="js/api.js"></script>
+
+
+    <!-- ================= MAP LOGIC ================= -->
+
+    <script src="js/map.js"></script>
+
+
+</body>
+
+</html>
