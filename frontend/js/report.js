@@ -1,93 +1,243 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const form = document.getElementById("reportForm");
+    const reportForm =
+        document.getElementById("reportForm");
 
-    if (!form) {
-        console.error("Report form not found.");
+    const locationInput =
+        document.getElementById("location");
+
+    const problemInput =
+        document.getElementById("problem");
+
+    const descriptionInput =
+        document.getElementById("description");
+
+    const successMessage =
+        document.getElementById("successMessage");
+
+
+    // ==========================================
+    // CHECK FORM
+    // ==========================================
+
+    if (!reportForm) {
+
+        console.error(
+            "AirTrace report form not found."
+        );
+
         return;
     }
 
-    form.addEventListener("submit", async (event) => {
 
-        event.preventDefault();
+    // ==========================================
+    // SUBMIT REPORT
+    // ==========================================
 
-        const cityInput = document.getElementById("city");
-        const problemInput = document.getElementById("problem");
-        const descriptionInput = document.getElementById("description");
+    reportForm.addEventListener(
+        "submit",
+        async (event) => {
 
-        const city = cityInput.value.trim();
-        const problem = problemInput ? problemInput.value.trim() : "";
-        const description = descriptionInput.value.trim();
+            event.preventDefault();
 
-        if (!city) {
-            alert("Please enter a city.");
-            return;
-        }
 
-        if (!description) {
-            alert("Please describe the pollution problem.");
-            return;
-        }
+            // ======================================
+            // READ FORM VALUES
+            // ======================================
 
-        /*
-         * We no longer restrict reports to five cities.
-         * The backend can process cities dynamically.
-         */
+            const city =
+                locationInput.value.trim();
 
-        const finalDescription = problem
-            ? `${problem}: ${description}`
-            : description;
+            const problem =
+                problemInput.value.trim();
 
-        try {
+            const description =
+                descriptionInput.value.trim();
 
-            // Get real coordinates for the entered city
-            const locationResponse = await fetch(
-                `${API_BASE_URL}/api/real-air-quality/${encodeURIComponent(city)}`
-            );
 
-            if (!locationResponse.ok) {
-                throw new Error(
-                    `Unable to find environmental data for ${city}`
+            // ======================================
+            // VALIDATION
+            // ======================================
+
+            if (!city ||
+                !problem ||
+                !description) {
+
+                alert(
+                    "Please fill all required fields."
                 );
+
+                return;
             }
 
-            const locationData = await locationResponse.json();
 
-            if (
-                locationData.error ||
-                locationData.latitude === undefined ||
-                locationData.longitude === undefined
-            ) {
-                throw new Error(
-                    `Could not locate ${city}. Please check the spelling.`
+            try {
+
+                // ==================================
+                // SHOW LOADING
+                // ==================================
+
+                successMessage.style.display =
+                    "block";
+
+                successMessage.textContent =
+                    "Finding city location...";
+
+
+                // ==================================
+                // GET REAL CITY DATA
+                // ==================================
+
+                const locationData =
+                    await apiRequest(
+                        `/api/real-air-quality/${encodeURIComponent(city)}`
+                    );
+
+
+                console.log(
+                    "Environmental data:",
+                    locationData
                 );
+
+
+                // ==================================
+                // CHECK CITY
+                // ==================================
+
+                if (
+                    !locationData ||
+                    locationData.error ||
+                    locationData.latitude === undefined ||
+                    locationData.longitude === undefined
+                ) {
+
+                    throw new Error(
+                        `Could not find location for ${city}`
+                    );
+
+                }
+
+
+                // ==================================
+                // GET COORDINATES
+                // ==================================
+
+                const latitude =
+                    locationData.latitude;
+
+                const longitude =
+                    locationData.longitude;
+
+
+                // ==================================
+                // COMBINE PROBLEM + DESCRIPTION
+                // ==================================
+
+                const fullDescription =
+                    `${problem}: ${description}`;
+
+
+                // ==================================
+                // CREATE REPORT
+                // ==================================
+
+                const report = {
+
+                    city: city,
+
+                    description:
+                        fullDescription,
+
+                    latitude:
+                        latitude,
+
+                    longitude:
+                        longitude
+
+                };
+
+
+                console.log(
+                    "Submitting AirTrace report:",
+                    report
+                );
+
+
+                // ==================================
+                // SHOW SUBMITTING
+                // ==================================
+
+                successMessage.textContent =
+                    "Submitting report...";
+
+
+                // ==================================
+                // SEND TO BACKEND
+                // ==================================
+
+                const response =
+                    await submitCitizenReport(
+                        report
+                    );
+
+
+                console.log(
+                    "AirTrace backend response:",
+                    response
+                );
+
+
+                // ==================================
+                // SUCCESS
+                // ==================================
+
+                successMessage.style.display =
+                    "block";
+
+                successMessage.textContent =
+                    "Report submitted successfully!";
+
+
+                // ==================================
+                // RESET FORM
+                // ==================================
+
+                reportForm.reset();
+
+
+                // ==================================
+                // HIDE MESSAGE AFTER 5 SECONDS
+                // ==================================
+
+                setTimeout(() => {
+
+                    successMessage.style.display =
+                        "none";
+
+                }, 5000);
+
+
+            } catch (error) {
+
+                // ==================================
+                // ERROR
+                // ==================================
+
+                console.error(
+                    "AirTrace report submission failed:",
+                    error
+                );
+
+
+                successMessage.style.display =
+                    "block";
+
+                successMessage.textContent =
+                    "Unable to submit report. Please check the city name and try again.";
+
             }
 
-            const report = {
-                city: city,
-                description: finalDescription,
-                latitude: locationData.latitude,
-                longitude: locationData.longitude
-            };
-
-            console.log("Submitting citizen report:", report);
-
-            const result = await submitCitizenReport(report);
-
-            console.log("Report submitted successfully:", result);
-
-            alert("Citizen pollution report submitted successfully! 🌱");
-
-            form.reset();
-
-        } catch (error) {
-
-            console.error("Citizen report submission error:", error);
-
-            alert(
-                "Unable to submit report.\n\n" +
-                "Please check the city name and try again."
-            );
         }
-    });
+    );
+
 });
